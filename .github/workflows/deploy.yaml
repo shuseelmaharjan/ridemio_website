@@ -1,0 +1,49 @@
+name: Deploy via SSH
+
+on:
+  push:
+    branches:
+      - main  # change if needed
+  workflow_dispatch:   # allows manual trigger
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout the repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2️⃣ Setup SSH keys and known_hosts
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          cat key/private_key > ~/.ssh/id_rsa
+          chmod 400 ~/.ssh/id_rsa
+
+          # Add your server to known_hosts
+          ssh-keyscan -H 54.91.15.72 >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      # 3️⃣ Optional: Print repo files (for debugging)
+      - name: List repo files
+        run: ls -la
+
+      # 4️⃣ Deploy via SSH
+      - name: Deploy to server
+        run: |
+          ssh -i ~/.ssh/id_rsa root@54.91.15.72 << 'EOF'
+            mkdir -p /root/ridemio_website
+            rm -rf /root/ridemio_website/*
+          EOF
+
+      # 5️⃣ Copy files to server (example using rsync)
+      - name: Copy files
+        run: |
+          rsync -avz -e "ssh -i ~/.ssh/id_rsa" ./ root@54.91.15.72:/root/ridemio_website/
+
+      # 6️⃣ Optional: Run deploy script on server
+      - name: Run deploy script
+        run: |
+          ssh -i ~/.ssh/id_rsa root@54.91.15.72 "bash /root/ridemio_website/run.sh"

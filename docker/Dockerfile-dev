@@ -11,9 +11,9 @@ ENV NODE_ENV=development
 EXPOSE 3000
 CMD ["npm", "run", "dev"]
 
-# Production image
-FROM base AS prod
-ENV NODE_ENV=production
-RUN npm run build
-EXPOSE 3000
-CMD ["npm", "start"]
+# # Production image
+# FROM base AS prod
+# ENV NODE_ENV=production
+# RUN npm run build
+# EXPOSE 3000
+# CMD ["npm", "start"]
