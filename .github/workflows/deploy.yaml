@@ -19,7 +19,7 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          cat key/private_key > ~/.ssh/id_rsa
+          cat key/private_key_base | base64 -d > ~/.ssh/id_rsa
           chmod 400 ~/.ssh/id_rsa
 
           # Add your server to known_hosts
