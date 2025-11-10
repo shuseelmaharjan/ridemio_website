@@ -4,7 +4,7 @@ services:
     container_name: ridemio_website
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile
       target: prod
     ports:
       - "4000:3000"
