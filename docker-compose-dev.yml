@@ -4,7 +4,7 @@ services:
     container_name: ridemio_website
     build:
       context: .
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile-dev
       target: dev
     ports:
       - "3000:3000"
