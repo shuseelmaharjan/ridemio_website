@@ -19,7 +19,6 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          cat key/private_key
           cat key/private_key > ~/.ssh/id_rsa
           chmod 400 ~/.ssh/id_rsa
 
@@ -34,7 +33,6 @@ jobs:
       # 4️⃣ Deploy via SSH
       - name: Deploy to server
         run: |
-          ssh -i ~/.ssh/id_rsa root@54.91.15.72 -vvv
           ssh -i ~/.ssh/id_rsa root@54.91.15.72 << 'EOF'
             mkdir -p /root/ridemio_website
             rm -rf /root/ridemio_website/*

@@ -1,5 +1,5 @@
 #/bin/bash
-set -xe
+# set -xe
 
 ssh -i key/private_key root@54.91.15.72 "mkdir -p /root/ridemio_website/ && rm -rf /root/ridemio_website/*"
 
