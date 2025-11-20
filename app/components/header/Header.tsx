@@ -1,165 +1,279 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../../components/ui/button";
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
 } from "../../components/ui/hover-card";
-import { Globe, Menu as MenuIcon, ArrowRight } from "lucide-react";
+import { Globe, Menu as MenuIcon, ArrowRight, X } from "lucide-react";
+import { apiHandler } from "../../../lib/apiHandler";
 
-// move this OUTSIDE to avoid re-creating on every render
-const NAV_ITEMS = [
-  {
-    label: "Services",
-    items: [
-      { label: "Rides", href: "/rides" },
-      { label: "Car", href: "/car" },
-      { label: "Tuktuk", href: "/tuktuk" },
-      { label: "Parcels", href: "/parcels" },
-      { label: "Rental", href: "/rental" },
-    ],
-  },
-  {
-    label: "Earn with Ridemio",
-    items: [
-      { label: "Drive with us", href: "/earn/driver" },
-      { label: "Deliver with us", href: "/earn/delivery" },
-      { label: "Become a merchant", href: "/earn/merchant" },
-    ],
-  },
-  {
-    label: "About Us",
-    items: [
-      { label: "Company", href: "/about/company" },
-      { label: "Blog", href: "/about/blog" },
-      { label: "Media", href: "/about/media" },
-    ],
-  },
-  {
-    label: "Help",
-    items: [
-      { label: "Help Center", href: "/help" },
-      { label: "Safety", href: "/help/safety" },
-      { label: "Support", href: "/help/support" },
-    ],
-  },
-  {
-    label: "Careers",
-    items: [
-      { label: "Open roles", href: "/careers" },
-      { label: "Life at Ridemio", href: "/careers/life" },
-    ],
-  },
-];
+type NavItem = {
+    label: string;
+    href: string;
+};
+
+type NavGroup = {
+    label: string;
+    items: NavItem[];
+};
+
+type NavSub = { name: string; slug: string };
+type ApiParent = { name: string; slug: string; submenus?: NavSub[] };
 
 export const Header: React.FC = () => {
-  // which top menu is active (Services, Earn with Ridemio, etc.)
-  const [activeParentIndex, setActiveParentIndex] = useState(0);
+    const [navItems, setNavItems] = useState<NavGroup[]>([]);
+    const [activeParentIndex, setActiveParentIndex] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const activeParent = NAV_ITEMS[activeParentIndex];
+    const activeParent = navItems[activeParentIndex] ?? navItems[0];
 
-  return (
-    <header className="w-full min-h-16 max-h-16 border-none bg-white">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <Image
-            src="/logo/logo.jpg"
-            alt="Ridemio logo"
-            width={130}
-            height={40}
-            className="h-9 w-auto object-contain"
-            priority
-          />
-        </Link>
+    useEffect(() => {
+        let mounted = true;
 
-        {/* Right controls */}
-        <div className="flex items-center gap-2 font-semibold">
-          <Button
-            variant="ghost"
-            size="md"
-            className="cursor-pointer gap-2 !rounded-full"
-          >
-            <Globe size={18} />
-            <span className="mr-2">En</span>
-          </Button>
+        async function loadNav() {
+            setLoading(true);
+            setError(null);
 
-          <Button
-            variant="outline"
-            size="md"
-            className="cursor-pointer gap-2 !rounded-full border-none bg-yellow"
-          >
-            Register
-          </Button>
+            try {
+                const data = await apiHandler<{ count: number; results: ApiParent[] }>(
+                    "get",
+                    "/api/website/api/navigation/"
+                );
 
-          {/* Mega menu trigger */}
-          <HoverCard openDelay={50} closeDelay={100}>
-            <HoverCardTrigger asChild>
-              <Button
-                variant="ghost"
-                size="md"
-                className="cursor-pointer gap-2 !rounded-full"
-              >
-                <MenuIcon size={18} />
-                <span className="mr-2">Menu</span>
-              </Button>
-            </HoverCardTrigger>
+                if (!mounted) return;
 
-            {/* SINGLE HoverCardContent that holds the whole mega menu */}
-            <HoverCardContent
-              align="end"
-              side="bottom"
-              sideOffset={12}
-              className="px-8 pt-0 pb-8"
-            >
-              <div className="mx-auto w-full max-w-7xl rounded-lg bg-nav p-6">
-                {/* Top row: parent menus */}
-                <div className="mb-6 flex flex-wrap gap-4 text-sm font-semibold">
-                  {NAV_ITEMS.map((item, index) => (
-                    <button
-                      key={item.label}
-                      onMouseEnter={() => setActiveParentIndex(index)}
-                      onFocus={() => setActiveParentIndex(index)}
-                      className={`rounded-xl px-4 py-2 transition ${
-                        index === activeParentIndex
-                          ? "bg-white text-black shadow-none cursor-pointer"
-                          : "text-gray-700 hover:bg-gray-100"
-                      }`}
+                if (data?.results && Array.isArray(data.results)) {
+                    const transformed: NavGroup[] = data.results.map((parent) => ({
+                        label: parent.name,
+                        items:
+                            parent.submenus?.map((s) => ({
+                                label: s.name,
+                                href: `/${parent.slug}/${s.slug}`,
+                            })) ?? [],
+                    }));
+
+                    setNavItems(transformed);
+                    setActiveParentIndex(0);
+                }
+            } catch (err: any) {
+                setError(typeof err === "string" ? err : "Failed to load navigation");
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadNav();
+        return () => {
+            mounted = false;
+        };
+    }, []);
+
+    // 👇 Lock background scroll when mobile menu is open
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            const originalOverflow = document.body.style.overflow;
+            document.body.style.overflow = "hidden";
+
+            return () => {
+                document.body.style.overflow = originalOverflow;
+            };
+        }
+
+        // on close, reset
+        document.body.style.overflow = "";
+    }, [isMobileMenuOpen]);
+
+    return (
+        <header className="sticky top-0 z-50 w-full border-b bg-white">
+            <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-0">
+                {/* Logo */}
+                <Link href="/" className="flex items-center gap-2">
+                    <Image
+                        src="/logo/logo.jpg"
+                        alt="Ridemio logo"
+                        width={130}
+                        height={40}
+                        className="h-9 w-auto object-contain"
+                        priority
+                    />
+                </Link>
+
+                {/* Right controls */}
+                <div className="flex items-center gap-2 font-semibold">
+                    {/* Language */}
+                    <Button
+                        variant="ghost"
+                        size="md"
+                        className="cursor-pointer gap-2 !rounded-full"
                     >
-                      {item.label}
+                        <Globe size={18} />
+                        <span className="mr-2 hidden sm:inline">En</span>
+                    </Button>
+
+                    {/* Register */}
+                    <Button
+                        variant="outline"
+                        size="md"
+                        className="cursor-pointer gap-2 !rounded-full border-none bg-yellow text-xs sm:text-sm"
+                    >
+                        Register
+                    </Button>
+
+                    {/* Desktop mega menu trigger */}
+                    <div className="hidden md:block">
+                        <HoverCard openDelay={50} closeDelay={100}>
+                            <HoverCardTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="md"
+                                    className="cursor-pointer gap-2 !rounded-full"
+                                    disabled={loading || !navItems.length}
+                                >
+                                    <MenuIcon size={18} />
+                                    <span className="mr-2">Menu</span>
+                                </Button>
+                            </HoverCardTrigger>
+
+                            <HoverCardContent
+                                align="end"
+                                side="bottom"
+                                sideOffset={12}
+                                className="px-8 pt-0 pb-8"
+                            >
+                                <div className="mx-auto w-full max-w-7xl rounded-lg bg-nav p-6">
+                                    {loading && (
+                                        <p className="text-sm text-gray-600">Loading menu...</p>
+                                    )}
+
+                                    {error && !loading && (
+                                        <p className="text-sm text-red-500">{error}</p>
+                                    )}
+
+                                    {!loading && !error && navItems.length === 0 && (
+                                        <p className="text-sm text-gray-600">
+                                            No menu items available.
+                                        </p>
+                                    )}
+
+                                    {!loading && !error && navItems.length > 0 && (
+                                        <>
+                                            {/* Top row: parent menus */}
+                                            <div className="mb-6 flex flex-wrap gap-4 text-sm font-semibold">
+                                                {navItems.map((item, index) => (
+                                                    <button
+                                                        key={item.label}
+                                                        onMouseEnter={() => setActiveParentIndex(index)}
+                                                        onFocus={() => setActiveParentIndex(index)}
+                                                        className={`rounded-xl px-4 py-2 transition ${
+                                                            index === activeParentIndex
+                                                                ? "bg-white text-black shadow-none cursor-pointer"
+                                                                : "text-gray-700 hover:bg-gray-100"
+                                                        }`}
+                                                    >
+                                                        {item.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+
+                                            {/* Left column: sub-menu items */}
+                                            <ul className="space-y-3 px-4 text-sm font-semibold text-[#111]">
+                                                {(activeParent?.items ?? []).map((item) => (
+                                                    <li key={item.href}>
+                                                        <Link
+                                                            href={item.href}
+                                                            className="group inline-flex cursor-pointer items-center gap-2"
+                                                        >
+                              <span className="transition-colors">
+                                {item.label}
+                              </span>
+                                                            <ArrowRight
+                                                                className="h-4 w-4 text-[#FED600] opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100"
+                                                                strokeWidth={2.5}
+                                                            />
+                                                        </Link>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </>
+                                    )}
+                                </div>
+                            </HoverCardContent>
+                        </HoverCard>
+                    </div>
+
+                    {/* Mobile menu trigger */}
+                    <button
+                        type="button"
+                        className="inline-flex items-center justify-center rounded-full p-2 hover:bg-gray-100 md:hidden"
+                        onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+                        aria-label="Toggle menu"
+                    >
+                        {isMobileMenuOpen ? <X size={18} /> : <MenuIcon size={18} />}
                     </button>
-                  ))}
                 </div>
+            </div>
 
-                {/* Left column: sub-menu items for active parent */}
-                <ul className="space-y-3 text-sm font-semibold text-[#111] px-4">
-                  {activeParent.items.map((item) => (
-                    <li key={item.label}>
-                      <Link
-                        href={item.href}
-                        className="group inline-flex items-center gap-2 cursor-pointer"
-                      >
-                        <span className="transition-colors">
-                          {item.label}
-                        </span>
+            {/* Mobile menu panel */}
+            {isMobileMenuOpen && (
+                <div className="block border-t bg-white shadow-sm md:hidden">
+                    <div
+                        className="
+              mx-auto max-w-7xl px-4 py-4
+              max-h-[calc(100vh-4rem)] overflow-y-auto
+            "
+                    >
+                        {loading && (
+                            <p className="text-sm text-gray-600">Loading menu...</p>
+                        )}
 
-                        <ArrowRight
-                          className="h-4 w-4 text-[#FED600] opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100"
-                          strokeWidth={2.5}
-                        />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </HoverCardContent>
-          </HoverCard>
-        </div>
-      </div>
-    </header>
-  );
+                        {error && !loading && (
+                            <p className="text-sm text-red-500">{error}</p>
+                        )}
+
+                        {!loading && !error && navItems.length === 0 && (
+                            <p className="text-sm text-gray-600">
+                                No menu items available.
+                            </p>
+                        )}
+
+                        {!loading && !error && navItems.length > 0 && (
+                            <div className="space-y-4">
+                                {navItems.map((group) => (
+                                    <div key={group.label} className="space-y-2">
+                                        <p className="text-xs font-semibold uppercase text-gray-500">
+                                            {group.label}
+                                        </p>
+                                        <ul className="space-y-1">
+                                            {group.items.map((item) => (
+                                                <li key={item.href}>
+                                                    <Link
+                                                        href={item.href}
+                                                        onClick={() => setIsMobileMenuOpen(false)}
+                                                        className="flex items-center justify-between rounded-lg px-2 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-100"
+                                                    >
+                                                        <span>{item.label}</span>
+                                                        <ArrowRight
+                                                            className="h-4 w-4 text-[#FED600]"
+                                                            strokeWidth={2.5}
+                                                        />
+                                                    </Link>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+        </header>
+    );
 };
