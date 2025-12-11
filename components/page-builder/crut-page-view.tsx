@@ -64,7 +64,7 @@ export function CrutPageView({ data }: Props) {
                   type="button"
                   onClick={() => handleClick(idx)}
                   className={`
-                    w-full text-left px-3 py-2 rounded-md text-sm
+                    w-full text-left px-3 py-1 text-sm
                     transition-all cursor-pointer
                     ${
                       idx === activeIndex
