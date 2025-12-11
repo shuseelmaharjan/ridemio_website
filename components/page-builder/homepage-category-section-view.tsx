@@ -12,7 +12,7 @@ type Props = {
 
 export function HomepageCategorySectionView({ data }: Props) {
   return (
-    <div className="mx-auto max-w-6xl px-4 pt-10 space-y-10">
+    <div>
       <section className="flex flex-col md:flex-row items-center gap-8">
         {data.icon?.url && (
           <div className="h-24 w-24 rounded-3xl bg-yellow-100 flex items-center justify-center overflow-hidden">

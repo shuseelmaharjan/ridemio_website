@@ -1,8 +1,8 @@
-// components/page-builder/sections/list-section.tsx
 "use client";
 
-import { HoverLinkButton } from "@/components/layout/button/hover-link-button";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { UAParser } from "ua-parser-js";
 
 type ListContent = {
   id?: string;
@@ -21,81 +21,116 @@ type ListDetails = {
 };
 
 type Props = {
-  listDetails: ListDetails;
+  listDetails: ListDetails | null;
 };
 
 export function ListSection({ listDetails }: Props) {
-  const listContents = listDetails.list_contents || [];
+  const isLoading =
+    !listDetails ||
+    !Array.isArray(listDetails.list_contents) ||
+    listDetails.list_contents.length === 0;
+
+  // Redirect function
+  const redirectLink = () => {
+    const parser = new UAParser();
+    const os = parser.getOS().name?.toLowerCase();
+
+    if (os?.includes("ios") && listDetails?.iosURL) {
+      window.open(listDetails.iosURL, "_blank");
+    } else if (listDetails?.androidURL) {
+      window.open(listDetails.androidURL, "_blank");
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <section className="space-y-4 bg-gray p-4 md:p-8">
+        <div className="text-center my-4 md:my-8">
+          <Skeleton className="h-10 w-64 mx-auto" />
+        </div>
+
+        <div className="flex bg-white flex-col md:flex-row items-center gap-8 container rounded-xl shadow mx-auto p-6">
+          {/* Image skeleton */}
+          <div className="w-full md:w-1/2">
+            <Skeleton className="w-full h-72 rounded-xl" />
+          </div>
+
+          {/* Right side skeleton */}
+          <div className="w-full md:w-1/2 space-y-6">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex items-start gap-4">
+                <Skeleton className="h-10 w-10 rounded-xl" />
+
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-5 w-3/4" />
+                  <Skeleton className="h-4 w-full" />
+                </div>
+              </div>
+            ))}
+
+            <Skeleton className="h-10 w-40 rounded-full" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+
+  const listContents = listDetails.list_contents;
   const listImageUri = listDetails.image?.url || null;
 
-  if (!listContents.length) return null;
-
   return (
-    <section className="space-y-4 rounded-3xl bg-white border shadow-sm p-6 md:p-8">
-      <div className="flex justify-end">
-        <Badge
-          variant="outline"
-          className="bg-slate-100 text-xs md:text-sm"
-        >
-          List section
-        </Badge>
-      </div>
-      <div className="text-center">
-        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+    <section className="space-y-4 bg-gray p-4 md:p-8">
+      <div className="text-center my-4 md:my-8">
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
           {listDetails.title}
         </h2>
       </div>
-      <div className="flex flex-col md:flex-row items-center gap-8 max-w-4xl mx-auto">
+
+      <div className="flex bg-white flex-col md:flex-row items-center gap-8 container rounded-xl shadow mx-auto">
+        {/* IMAGE */}
         {listImageUri && (
-          <div className="w-full md:w-80 flex-shrink-0">
-            <div className="relative rounded-3xl overflow-hidden">
+          <div className="w-full md:w-1/2">
+            <div className="relative overflow-hidden flex items-center justify-end">
               <img
                 src={listImageUri}
                 alt={listDetails.title}
-                className="w-full h-auto max-h-96 max-w-96 object-cover"
+                className="max-h-[28rem] w-auto object-cover"
               />
             </div>
           </div>
         )}
 
-        <div className="flex-1 space-y-4">
-          <div className="space-y-6">
-            {listContents.map((content, idx) => (
-              <div
-                key={content.id ?? idx}
-                className="flex items-start gap-3 rounded-2xl"
-              >
-                <div className="mt-1 flex h-7 w-7 items-center justify-center rounded-lg bg-yellow-300 text-xs font-bold shadow-md">
+        {/* CONTENT */}
+        <div className="w-full md:w-1/2 space-y-8 p-4 md:p-0">
+          {listContents.map((content, idx) => (
+            <div key={content.id ?? idx}>
+              <div className="flex items-start gap-4 rounded-2xl">
+                <div className="mt-1 flex h-10 w-10 items-center justify-center rounded-xl bg-yellow-300 text-lg md:text-base font-bold shadow-md">
                   {idx + 1}
                 </div>
+
                 <div>
-                  <h4 className="font-semibold text-sm md:text-base">
+                  <h4 className="font-semibold text-lg md:text-xl">
                     {content.title}
                   </h4>
+
                   {content.description && (
-                    <p className="text-xs md:text-sm text-muted-foreground">
+                    <p className="mt-1 text-sm md:text-base text-muted-foreground leading-relaxed">
                       {content.description}
                     </p>
                   )}
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
+
+          {/* BUTTON */}
+          {listDetails.haveButton && listDetails.buttonLabel && (
+            <Button onClick={redirectLink}>{listDetails.buttonLabel}</Button>
+          )}
         </div>
       </div>
-
-      {listDetails.haveButton &&
-        listDetails.buttonLabel &&
-        (listDetails.iosURL || listDetails.androidURL) && (
-          <div className="flex justify-center mt-4">
-            <HoverLinkButton
-              label={listDetails.buttonLabel}
-              iosUrl={listDetails.iosURL}
-              androidUrl={listDetails.androidURL}
-              className="rounded-xl px-6 bg-black text-white hover:bg-gray-800 font-semibold"
-            />
-          </div>
-        )}
     </section>
   );
 }

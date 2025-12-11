@@ -67,7 +67,7 @@ export default async function SlugPage({ params }: SlugPageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-[#F7F7F7] pb-16">
+    <main className="min-h-screen">
       <DynamicPageRenderer resolved={resolved!} />
     </main>
   );
