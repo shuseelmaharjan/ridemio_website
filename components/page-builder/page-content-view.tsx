@@ -21,44 +21,92 @@ export function PageContentView({ data }: Props) {
   const coverUrl = data.cover_page?.url || null;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pt-10 space-y-10">
-      {/* HERO */}
-      <section className="grid grid-cols-1 md:grid-cols-[3fr,2fr] gap-8 items-center">
-        <div className="space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-500">
-            {data.slug.replace(/-/g, " ")}
-          </p>
-          <h1 className="text-3xl md:text-4xl font-black">
-            {data.title}
-          </h1>
-          {hasDescription && (
-            <p className="text-sm md:text-base text-muted-foreground max-w-xl">
-              {data.description}
-            </p>
-          )}
-        </div>
+    <div className="mx-auto">
 
-        {hasImage && (
-          <div className="relative rounded-3xl overflow-hidden bg-gray-100 aspect-[4/3]">
+      <section className="relative overflow-hidden">
+        {/* Background */}
+        {data.have_cover_page && coverUrl ? (
+          <div className="absolute inset-0">
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/20 z-10" />
             <img
-              src={data.image.url}
-              alt={data.title}
-              className="h-full w-full object-cover"
+              src={coverUrl}
+              alt=""
+              className="w-full h-full object-cover"
             />
           </div>
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white" />
         )}
+
+        <div className="relative z-10 container mx-auto px-4 py-16 md:py-24">
+          <div
+            className={
+              hasImage
+                ? "flex flex-col lg:flex-row items-center gap-8 md:gap-12"
+                : "max-w-3xl mx-auto"
+            }
+          >
+            {/* Text Content */}
+            <div
+              className={`${hasImage ? "flex-1" : "text-center"} ${data.have_cover_page ? "text-white" : ""
+                }`}
+            >
+              <h1
+                className={`font-bold leading-tight ${data.have_cover_page
+                  ? "text-3xl md:text-4xl lg:text-5xl text-white"
+                  : "text-3xl md:text-4xl text-gray-900"
+                  } ${hasDescription && hasImage ? "" : "mb-6"}`}
+              >
+                {data.title}
+              </h1>
+
+              {hasDescription && (
+                <div
+                  className={`
+                mt-4 md:mt-6 text-lg leading-relaxed
+                ${data.have_cover_page
+                      ? "text-gray-200 max-w-2xl"
+                      : "text-gray-700 max-w-2xl"
+                    }
+                ${!hasImage ? "mx-auto" : ""}
+              `}
+                  // description is HTML
+                  dangerouslySetInnerHTML={{ __html: data.description }}
+                />
+              )}
+            </div>
+
+            {/* Image */}
+            {hasImage && (
+              <div
+                className={`
+              ${!hasDescription ? "w-full lg:w-2/3" : "w-full lg:w-1/2"}
+              ${data.have_cover_page ? "mt-8 lg:mt-0" : ""}
+            `}
+              >
+                <div className="relative">
+                  <div
+                    className={`
+                  overflow-hidden rounded-xl md:rounded-2xl
+                  ${data.have_cover_page
+                        ? "shadow-2xl ring-2 ring-white/10"
+                        : "shadow-xl border border-gray-100"
+                      }
+                `}
+                  >
+                    <img
+                      src={data.image.url}
+                      alt={data.title}
+                      className="w-full h-auto object-cover"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </section>
 
-      {/* Optional cover strip */}
-      {data.have_cover_page && coverUrl && (
-        <section className="rounded-3xl overflow-hidden bg-gray-100">
-          <img
-            src={coverUrl}
-            alt={`${data.title} cover`}
-            className="w-full h-auto object-cover"
-          />
-        </section>
-      )}
 
       {/* YOUTUBE SECTION */}
       {data.have_youtube_content && (

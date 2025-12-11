@@ -1,4 +1,3 @@
-// components/page-builder/sections/grid-section.tsx
 "use client";
 
 import { Badge } from "@/components/ui/badge";
@@ -23,22 +22,14 @@ export function GridSection({ gridDetails }: Props) {
   if (!gridContents.length) return null;
 
   return (
-    <section className="space-y-4 bg-white rounded-3xl border shadow-sm p-6 md:p-8">
-      <div className="flex justify-end">
-        <Badge
-          variant="outline"
-          className="bg-slate-100 text-xs md:text-sm"
-        >
-          Grid section
-        </Badge>
-      </div>
+    <section className="space-y-4 bg-white p-6 md:p-8">
       <div className="text-center">
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
           {gridDetails.title}
         </h2>
       </div>
 
-      <div className="max-w-4/5 mx-auto">
+      <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ">
           {gridContents.map((content, idx) => (
             <div
