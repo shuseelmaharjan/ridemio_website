@@ -13,27 +13,27 @@ type Props = {
 export function HomepageCategorySectionView({ data }: Props) {
   return (
     <div>
-      <section className="flex flex-col md:flex-row items-center gap-8">
-        {data.icon?.url && (
-          <div className="h-24 w-24 rounded-3xl bg-yellow-100 flex items-center justify-center overflow-hidden">
-            <img
-              src={data.icon.url}
-              alt={data.title}
-              className="h-16 w-16 object-contain"
-            />
-          </div>
-        )}
-        <div className="space-y-3">
-          <h1 className="text-3xl md:text-4xl font-black">
+      <section className="px-4 py-12 md:py-16">
+        <div className="max-w-3xl mx-auto text-center space-y-4 animate-fadeIn">
+          {/* Title */}
+          <h1 className="text-3xl md:text-4xl font-extrabold leading-tight text-gray-900">
             {data.title}
           </h1>
+
+          {/* Description (supports HTML) */}
           {data.description && (
-            <p className="text-sm md:text-base text-muted-foreground max-w-xl">
-              {data.description}
-            </p>
+            <div
+              className="
+          text-sm md:text-base 
+          text-muted-foreground 
+          max-w-2xl mx-auto leading-relaxed
+        "
+              dangerouslySetInnerHTML={{ __html: data.description }}
+            />
           )}
         </div>
       </section>
+
 
       {data.have_card && data.card_details && (
         <CardSection cardDetails={data.card_details} />
