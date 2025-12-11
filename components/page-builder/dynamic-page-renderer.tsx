@@ -1,4 +1,3 @@
-// components/page-builder/dynamic-page-renderer.tsx
 "use client";
 
 import type { PageResolverResponse } from "@/app/[slug]/page";
