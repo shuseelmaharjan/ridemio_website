@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import DownloadNow from "../common/additional/DownloadNow";
 
 type Props = {
   data: {
@@ -45,6 +46,7 @@ export function CrutPageView({ data }: Props) {
   };
 
   return (
+    <>
     <div className="min-h-screen bg-white text-black">
       {/* Top centered page title */}
       <div className="mt-10 text-center">
@@ -113,5 +115,7 @@ export function CrutPageView({ data }: Props) {
         </section>
       </div>
     </div>
+    <DownloadNow/>
+    </>
   );
 }

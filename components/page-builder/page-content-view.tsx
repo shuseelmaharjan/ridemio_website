@@ -8,6 +8,7 @@ import { AdditionalInfoSection } from "./sections/additional-info-section";
 import { YoutubeSection } from "./sections/youtube-section";
 import { ToggleSection } from "./sections/toggle-section";
 import { ImageCardSection } from "./sections/image-card-section";
+import DownloadSection from "../common/additional/DownloadSection";
 
 type PageContentData = any; // you can paste the exact TS type from API later
 
@@ -21,6 +22,7 @@ export function PageContentView({ data }: Props) {
   const coverUrl = data.cover_page?.url || null;
 
   return (
+    <>
     <div className="mx-auto">
 
       <section className="relative overflow-hidden">
@@ -156,5 +158,7 @@ export function PageContentView({ data }: Props) {
         <AdditionalInfoSection additionalInfo={data.additional_info_details} />
       )}
     </div>
+    <DownloadSection/>
+    </>
   );
 }
