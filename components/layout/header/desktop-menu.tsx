@@ -34,7 +34,7 @@ export function DesktopMenu({
                 <HoverCardTrigger asChild>
                     <Button
                         variant="ghost"
-                        className="cursor-pointer gap-2 rounded-full"
+                        className="cursor-pointer gap-2 !rounded-full"
                         disabled={loading || !navItems.length}
                     >
                         <MenuIcon size={18} />
@@ -51,7 +51,7 @@ export function DesktopMenu({
             px-0 pt-0 pb-8
             w-screen max-w-none
             z-[100]
-            -ml-4
+            -ml-4 -mt-2
           "
                 >
                     {/* outer width matches page container */}

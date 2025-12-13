@@ -1,6 +1,8 @@
 // components/page-builder/career-page-view.tsx
 "use client";
 
+import DownloadNow from "../common/additional/DownloadNow";
+
 type Props = {
   data: {
     title: string;
@@ -19,6 +21,7 @@ export function CareerPageView({ data }: Props) {
   const end = new Date(data.end_date);
 
   return (
+    <>
     <div className="mx-auto max-w-4xl px-4 pt-10 space-y-8">
       <section className="rounded-3xl bg-white shadow-sm border overflow-hidden">
         {data.image?.url && (
@@ -78,5 +81,7 @@ export function CareerPageView({ data }: Props) {
         </div>
       </section>
     </div>
+    <DownloadNow/>
+    </>
   );
 }

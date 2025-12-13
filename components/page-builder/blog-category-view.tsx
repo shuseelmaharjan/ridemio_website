@@ -2,6 +2,7 @@
 "use client";
 
 import Link from "next/link";
+import DownloadNow from "../common/additional/DownloadNow";
 
 type Props = {
   data: {
@@ -20,6 +21,7 @@ type Props = {
 
 export function BlogCategoryView({ data }: Props) {
   return (
+    <>
     <div className="mx-auto max-w-6xl px-4 pt-10 space-y-8">
       <header className="space-y-2 text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-500">
@@ -64,5 +66,7 @@ export function BlogCategoryView({ data }: Props) {
         ))}
       </section>
     </div>
+    <DownloadNow/>
+    </>
   );
 }

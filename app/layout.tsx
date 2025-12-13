@@ -45,7 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} ${agrandir.variable}`}>
-      <Header/>
+        <Header />
         {children}
         <Footer />
       </body>

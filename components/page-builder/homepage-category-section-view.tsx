@@ -1,10 +1,10 @@
-// components/page-builder/homepage-category-section-view.tsx
 "use client";
 
 import { CardSection } from "./sections/card-section";
 import { GridSection } from "./sections/grid-section";
 import { ListSection } from "./sections/list-section";
 import { AdditionalInfoSection } from "./sections/additional-info-section";
+import DownloadSection from "../common/additional/DownloadSection";
 
 type Props = {
   data: any;
@@ -47,6 +47,7 @@ export function HomepageCategorySectionView({ data }: Props) {
       {data.have_additional_info && data.additional_info_details && (
         <AdditionalInfoSection additionalInfo={data.additional_info_details} />
       )}
+      <DownloadSection/>
     </div>
   );
 }
