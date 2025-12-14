@@ -4,24 +4,16 @@ import { useEffect, useState } from "react";
 import { apiHandler } from "@/api/apiHandler";
 import type { NavGroup } from "../types";
 
-type NavigationApiResponse = {
-  count: number;
-  total_pages: number;
-  current_page: number;
-  next: string | null;
-  previous: string | null;
-  results: {
-    id: string;
-    name: string;
-    submenus: { name: string; slug: string }[];
-    serial: number;
-  }[];
+type ApiNavGroup = {
+  id: string;
+  name: string;
+  submenus: { name: string; slug: string }[];
 };
 
 export function useNavigation() {
   const [navItems, setNavItems] = useState<NavGroup[]>([]);
   const [activeParentIndex, setActiveParentIndex] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // start true looks better
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -32,24 +24,20 @@ export function useNavigation() {
       setError(null);
 
       try {
-        const data = await apiHandler<NavigationApiResponse>(
+        const data = await apiHandler<ApiNavGroup[]>(
           "get",
           "/api/website/public/v1/navigation/"
         );
 
         if (!mounted) return;
 
-        const groups: NavGroup[] = data.results
-          .slice() // avoid mutating original
-          .sort((a, b) => a.serial - b.serial)
-          .map((group) => ({
-            label: group.name,
-            items: group.submenus.map((submenu) => ({
-              label: submenu.name,
-              // redirect to base_url/slug → in Next, this is just /slug
-              href: `/${submenu.slug}`,
-            })),
-          }));
+        const groups: NavGroup[] = (data ?? []).map((group) => ({
+          label: group.name,
+          items: (group.submenus ?? []).map((submenu) => ({
+            label: submenu.name,
+            href: `/${submenu.slug}`,
+          })),
+        }));
 
         setNavItems(groups);
         setActiveParentIndex(0);
@@ -66,7 +54,6 @@ export function useNavigation() {
     }
 
     fetchNavigation();
-
     return () => {
       mounted = false;
     };

@@ -1,4 +1,3 @@
-// app/[slug]/page.tsx
 import { notFound } from "next/navigation";
 import { DynamicPageRenderer } from "@/components/page-builder/dynamic-page-renderer";
 import { apiHandler, ApiError } from "@/api/apiHandler";
