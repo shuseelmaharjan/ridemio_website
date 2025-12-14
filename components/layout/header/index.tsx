@@ -22,6 +22,8 @@ export function Header() {
         document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
     }, [isMobileMenuOpen]);
 
+    console.log("Nav Items:", navItems);
+
     return (
         <>
             <header className="sticky top-0 z-50 border-b bg-white">
