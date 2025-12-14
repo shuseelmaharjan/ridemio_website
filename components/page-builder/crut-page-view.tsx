@@ -47,75 +47,84 @@ export function CrutPageView({ data }: Props) {
 
   return (
     <>
-    <div className="min-h-screen bg-white text-black">
-      {/* Top centered page title */}
-      <div className="mt-10 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-          {data.page_title}
-        </h1>
-      </div>
+      <div className="min-h-screen bg-white text-black">
+        {/* Page title */}
+        <div className="mt-8 sm:mt-10 text-center px-0 md:px-4">
+          <h1 className="text-3xl sm:text-2xl md:text-4xl font-bold tracking-tight">
+            {data.page_title}
+          </h1>
+        </div>
 
-      <div className="mx-auto container px-4 py-8 lg:grid lg:grid-cols-4 lg:gap-10">
-        {/* LEFT SIDEBAR */}
-        <aside className="hidden md:block lg:col-span-1 mb-6 lg:mb-0">
-          <div className="lg:sticky lg:top-24 space-y-4">
-            <nav className="space-y-1">
-              {data.crut_contents.map((section, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => handleClick(idx)}
-                  className={`
-                    w-full text-left px-3 py-1 text-sm
-                    transition-all cursor-pointer
-                    ${
-                      idx === activeIndex
-                        ? "text-gray-700"
-                        : "text-gray-600 hover:text-black"
-                    }
-                  `}
-                >
-                  {section.title}
-                </button>
-              ))}
-            </nav>
-          </div>
-        </aside>
-
-        {/* RIGHT CONTENT */}
-        <section className="lg:col-span-3">
-          <div className="bg-white p-6 md:p-8">
-            <div className="space-y-12">
-              {data.crut_contents.map((section, idx) => (
-                <article
-                  key={idx}
-                  ref={(el: HTMLElement | null) => {
-                    sectionRefs.current[idx] = el;
-                  }}
-                  data-index={idx}
-                  className="scroll-mt-24 space-y-4"
-                >
-                  <h2
+        <div className="mx-auto container px-0 md:px-4 py-6 sm:py-8 lg:grid lg:grid-cols-4 lg:gap-10">
+          {/* LEFT SIDEBAR */}
+          <aside className="hidden md:block lg:col-span-1 mb-6 lg:mb-0">
+            <div className="lg:sticky lg:top-24 space-y-3">
+              <nav className="space-y-1">
+                {data.crut_contents.map((section, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handleClick(idx)}
                     className={`
-                      text-xl md:text-2xl font-semibold
-                      ${idx === activeIndex ? "text-black" : "text-gray-800"}
+                      w-full text-left px-3 py-1.5
+                      text-xs md:text-sm
+                      transition-all cursor-pointer
+                      ${
+                        idx === activeIndex
+                          ? "text-black font-medium"
+                          : "text-gray-600 hover:text-black"
+                      }
                     `}
                   >
                     {section.title}
-                  </h2>
-
-                  <div
-                    className="text-gray-700 leading-relaxed space-y-3"
-                    dangerouslySetInnerHTML={{ __html: section.content }}
-                  />
-                </article>
-              ))}
+                  </button>
+                ))}
+              </nav>
             </div>
-          </div>
-        </section>
+          </aside>
+
+          {/* RIGHT CONTENT */}
+          <section className="lg:col-span-3">
+            <div className="bg-white p-4 md:p-4 ">
+              <div className="space-y-10 sm:space-y-12">
+                {data.crut_contents.map((section, idx) => (
+                  <article
+                    key={idx}
+                    ref={(el: HTMLElement | null) => {
+                      sectionRefs.current[idx] = el;
+                    }}
+                    data-index={idx}
+                    className="scroll-mt-24 space-y-3 sm:space-y-4"
+                  >
+                    <h2
+                      className={`
+                        text-lg sm:text-xl md:text-2xl font-semibold
+                        ${idx === activeIndex ? "text-black" : "text-gray-800"}
+                      `}
+                    >
+                      {section.title}
+                    </h2>
+
+                    <div
+                      className="
+                        text-xs sm:text-sm md:text-base
+                        text-gray-700
+                        leading-relaxed sm:leading-loose
+                        space-y-3
+                      "
+                      dangerouslySetInnerHTML={{
+                        __html: section.content,
+                      }}
+                    />
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
-    </div>
-    <DownloadNow/>
+
+      <DownloadNow />
     </>
   );
 }

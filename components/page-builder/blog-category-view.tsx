@@ -1,4 +1,3 @@
-// components/page-builder/blog-category-view.tsx
 "use client";
 
 import Link from "next/link";

@@ -34,23 +34,22 @@ export function AdditionalInfoSection({ additionalInfo }: Props) {
       window.open(additionalInfo.android_url, "_blank");
     }
   };
+
   if (isLoading) {
     return (
       <section className="space-y-4 bg-[#141414] py-8">
         <div className="flex flex-col md:flex-row items-center gap-8 container mx-auto p-6">
-
           {/* Mobile Image Skeleton */}
           <div className="block md:hidden w-full">
             <Skeleton className="w-full h-60 rounded-xl" />
           </div>
 
           <div className="w-full md:w-1/2 space-y-6 p-4 md:p-8">
-            <Skeleton className="h-8 w-72" /> {/* Title */}
-            <Skeleton className="h-4 w-full" /> {/* Paragraph */}
+            <Skeleton className="h-8 w-72" />
+            <Skeleton className="h-4 w-full" />
             <Skeleton className="h-4 w-5/6" />
             <Skeleton className="h-4 w-4/6" />
-
-            <Skeleton className="h-10 w-40 rounded-full" /> {/* Button */}
+            <Skeleton className="h-10 w-40 rounded-full" />
           </div>
 
           {/* Desktop Image Skeleton */}
@@ -66,8 +65,7 @@ export function AdditionalInfoSection({ additionalInfo }: Props) {
 
   return (
     <section className="space-y-4 bg-[#141414]">
-      <div className="flex flex-col md:flex-row items-center gap-8 container mx-auto">
-
+      <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 container mx-auto">
         {/* Mobile image */}
         {imageUrl && (
           <div className="block md:hidden w-full flex-shrink-0">
@@ -79,15 +77,17 @@ export function AdditionalInfoSection({ additionalInfo }: Props) {
           </div>
         )}
 
-        <div className="w-full md:w-1/2 space-y-8 p-4 md:p-8">
-          <h2 className="text-white text-3xl md:text-4xl font-bold tracking-tight">
+        <div className="w-full md:w-1/2 space-y-6 sm:space-y-8 p-4 md:p-8">
+          {/* Title */}
+          <h2 className="text-white text-xl sm:text-2xl md:text-4xl font-bold tracking-tight text-center md:text-left">
             {additionalInfo.title}
           </h2>
 
+          {/* Description */}
           {additionalInfo.description && (
             <div
               className="
-                text-sm md:text-base text-white space-y-2
+                text-xs sm:text-sm md:text-base text-white space-y-2
                 [&_ul]:list-disc [&_ul]:ml-5
                 [&_ol]:list-decimal [&_ol]:ml-5
                 [&_li]:mt-1
@@ -98,13 +98,17 @@ export function AdditionalInfoSection({ additionalInfo }: Props) {
             />
           )}
 
+          {/* Button */}
           {additionalInfo.button_label && (
-            <Button
+            <div className="flex items-center justify-center md:justify-start mb-4">
+              <Button
+              size="sm"
+              className="sm:size-default !text-black bg-yellow font-semibold"
               onClick={redirectLink}
-              className="!text-black bg-yellow font-semibold"
             >
               {additionalInfo.button_label}
             </Button>
+              </div>
           )}
         </div>
 
