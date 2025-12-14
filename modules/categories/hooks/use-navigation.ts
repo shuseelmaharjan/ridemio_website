@@ -10,10 +10,24 @@ type ApiNavGroup = {
   submenus: { name: string; slug: string }[];
 };
 
+type ApiResponseWrapped = {
+  value: ApiNavGroup[];
+  Count?: number;
+};
+
+function isWrappedResponse(data: unknown): data is ApiResponseWrapped {
+  return (
+    typeof data === "object" &&
+    data !== null &&
+    "value" in data &&
+    Array.isArray((data as any).value)
+  );
+}
+
 export function useNavigation() {
   const [navItems, setNavItems] = useState<NavGroup[]>([]);
   const [activeParentIndex, setActiveParentIndex] = useState(0);
-  const [loading, setLoading] = useState(true); // start true looks better
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -24,14 +38,21 @@ export function useNavigation() {
       setError(null);
 
       try {
-        const data = await apiHandler<ApiNavGroup[]>(
+        // allow either shape: ApiNavGroup[] OR { value: ApiNavGroup[] }
+        const data = await apiHandler<ApiNavGroup[] | ApiResponseWrapped>(
           "get",
           "/api/website/public/v1/navigation/"
         );
 
         if (!mounted) return;
 
-        const groups: NavGroup[] = (data ?? []).map((group) => ({
+        const navigationData: ApiNavGroup[] = Array.isArray(data)
+          ? data
+          : isWrappedResponse(data)
+            ? data.value
+            : [];
+
+        const groups: NavGroup[] = navigationData.map((group) => ({
           label: group.name,
           items: (group.submenus ?? []).map((submenu) => ({
             label: submenu.name,
@@ -43,11 +64,8 @@ export function useNavigation() {
         setActiveParentIndex(0);
       } catch (err: any) {
         if (!mounted) return;
-        setError(
-          typeof err?.message === "string"
-            ? err.message
-            : "Failed to load navigation"
-        );
+        console.error("Navigation API Error:", err);
+        setError(typeof err?.message === "string" ? err.message : "Failed to load navigation");
       } finally {
         if (mounted) setLoading(false);
       }
@@ -59,11 +77,6 @@ export function useNavigation() {
     };
   }, []);
 
-  return {
-    navItems,
-    activeParentIndex,
-    setActiveParentIndex,
-    loading,
-    error,
-  };
+
+  return { navItems, activeParentIndex, setActiveParentIndex, loading, error };
 }

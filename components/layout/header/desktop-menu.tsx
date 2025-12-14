@@ -1,13 +1,9 @@
-// /components/layout/header/desktop-menu.tsx
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { ArrowRight, Menu as MenuIcon } from "lucide-react";
 import type { NavGroup } from "@/modules/categories/types";
 
@@ -26,16 +22,21 @@ export function DesktopMenu({
   loading = false,
   error = null,
 }: Props) {
+  const [open, setOpen] = useState(false);
   const activeParent = navItems[activeIndex] ?? navItems[0];
+
+  console.log("DesktopMenu render:", { navItems, activeIndex, loading, error });
+
 
   return (
     <div className="hidden md:block w-full max-w-max">
-      <HoverCard openDelay={60} closeDelay={120}>
+      <HoverCard open={open} onOpenChange={setOpen} openDelay={60} closeDelay={350}>
         <HoverCardTrigger asChild>
           <Button
             variant="ghost"
             className="cursor-pointer gap-2 !rounded-full text-sm md:text-[0.95rem]"
             disabled={loading || !navItems.length}
+            onMouseEnter={() => setOpen(true)}
           >
             <MenuIcon className="h-4 w-4 md:h-[18px] md:w-[18px]" />
             <span className="mr-2">Menu</span>
@@ -43,36 +44,27 @@ export function DesktopMenu({
         </HoverCardTrigger>
 
         <HoverCardContent
-          align="end"
+          align="start"
           side="bottom"
-          sideOffset={12}
+          sideOffset={4}                
           className="
             border-none bg-white shadow-none
-            px-0 pt-0 pb-8
+            p-0
             w-screen max-w-none
             z-[100]
-            -ml-4 -mt-2
           "
         >
-          <div className="mx-auto w-full max-w-7xl px-4">
+          <div
+            className="mx-auto w-full max-w-7xl px-4"
+            onMouseEnter={() => setOpen(true)}
+            onMouseLeave={() => setOpen(false)}
+          >
             <div className="w-full rounded-3xl bg-[#F8F8F8] p-6 md:p-8">
-              {loading && (
-                <p className="text-xs md:text-sm text-gray-600">Loading menu...</p>
-              )}
-
-              {error && !loading && (
-                <p className="text-xs md:text-sm text-red-500">{error}</p>
-              )}
-
-              {!loading && !error && navItems.length === 0 && (
-                <p className="text-xs md:text-sm text-gray-600">
-                  No menu items available.
-                </p>
-              )}
+              {loading && <p className="text-xs md:text-sm text-gray-600">Loading menu...</p>}
+              {error && !loading && <p className="text-xs md:text-sm text-red-500">{error}</p>}
 
               {!loading && !error && navItems.length > 0 && (
                 <>
-                  {/* Parent tabs */}
                   <div className="mb-6 flex flex-wrap gap-2 md:gap-3">
                     {navItems.map((item, index) => {
                       const isActive = index === activeIndex;
@@ -84,9 +76,7 @@ export function DesktopMenu({
                           className={[
                             "rounded-xl px-3 py-2 md:px-4 md:py-2.5 cursor-pointer transition",
                             "text-xs md:text-sm font-semibold",
-                            isActive
-                              ? "bg-white text-black shadow-sm"
-                              : "text-gray-700 hover:bg-gray-100",
+                            isActive ? "bg-white text-black shadow-sm" : "text-gray-700 hover:bg-gray-100",
                           ].join(" ")}
                         >
                           {item.label}
@@ -95,14 +85,10 @@ export function DesktopMenu({
                     })}
                   </div>
 
-                  {/* Submenu list */}
                   <ul className="space-y-2.5 md:space-y-3 text-sm md:text-[0.95rem] font-semibold text-[#111]">
                     {(activeParent?.items ?? []).map((item) => (
                       <li key={item.href}>
-                        <Link
-                          href={item.href}
-                          className="group inline-flex items-center gap-2 hover:text-black/90"
-                        >
+                        <Link href={item.href} className="group inline-flex items-center gap-2 hover:text-black/90">
                           <span>{item.label}</span>
                           <ArrowRight
                             className="h-4 w-4 text-[#FED600] opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100"
@@ -113,6 +99,10 @@ export function DesktopMenu({
                     ))}
                   </ul>
                 </>
+              )}
+
+              {!loading && !error && navItems.length === 0 && (
+                <p className="text-xs md:text-sm text-gray-600">No menu items available.</p>
               )}
             </div>
           </div>
