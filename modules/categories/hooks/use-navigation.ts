@@ -10,20 +10,6 @@ type ApiNavGroup = {
   submenus: { name: string; slug: string }[];
 };
 
-type ApiResponseWrapped = {
-  value: ApiNavGroup[];
-  Count?: number;
-};
-
-function isWrappedResponse(data: unknown): data is ApiResponseWrapped {
-  return (
-    typeof data === "object" &&
-    data !== null &&
-    "value" in data &&
-    Array.isArray((data as any).value)
-  );
-}
-
 export function useNavigation() {
   const [navItems, setNavItems] = useState<NavGroup[]>([]);
   const [activeParentIndex, setActiveParentIndex] = useState(0);
@@ -38,21 +24,14 @@ export function useNavigation() {
       setError(null);
 
       try {
-        // allow either shape: ApiNavGroup[] OR { value: ApiNavGroup[] }
-        const data = await apiHandler<ApiNavGroup[] | ApiResponseWrapped>(
+        const data = await apiHandler<ApiNavGroup[]>(
           "get",
           "/api/website/public/v1/navigation/"
         );
 
         if (!mounted) return;
 
-        const navigationData: ApiNavGroup[] = Array.isArray(data)
-          ? data
-          : isWrappedResponse(data)
-            ? data.value
-            : [];
-
-        const groups: NavGroup[] = navigationData.map((group) => ({
+        const groups: NavGroup[] = (data ?? []).map((group) => ({
           label: group.name,
           items: (group.submenus ?? []).map((submenu) => ({
             label: submenu.name,
@@ -77,6 +56,11 @@ export function useNavigation() {
     };
   }, []);
 
-
-  return { navItems, activeParentIndex, setActiveParentIndex, loading, error };
+  return {
+    navItems,
+    activeParentIndex,
+    setActiveParentIndex,
+    loading,
+    error,
+  };
 }
