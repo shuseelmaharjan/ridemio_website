@@ -17,13 +17,7 @@ export function HomepageCategorySectionView({ data }: Props) {
         <div className="max-w-3xl mx-auto text-center space-y-3 sm:space-y-4 animate-fadeIn">
           {/* Title */}
           <h1
-            className="
-        text-xl sm:text-2xl md:text-4xl
-        font-extrabold
-        leading-snug sm:leading-tight
-        text-gray-900
-      "
-          >
+            className="text-3xl sm:text-2xl md:text-4xl font-bold tracking-tight">
             {data.title}
           </h1>
 

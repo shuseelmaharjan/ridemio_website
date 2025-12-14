@@ -9,7 +9,7 @@ type Props = {
 export function HeaderActions({ isMobileOpen, toggleMobile }: Props) {
   return (
     <div className="flex items-center gap-2 font-semibold py-2">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 mr-2">
         <Button
           variant="ghost"
           className="gap-2 !rounded-full cursor-pointer px-3 py-1 text-xs sm:text-sm"
