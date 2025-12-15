@@ -55,6 +55,7 @@ function HeroSlideComponent({
   if (!slides.length) return null;
 
   return (
+    // <section className="relative z-0 flex min-h-[calc(100vh-25rem)] md:min-h-[calc(100vh-8rem)] bg-black">
     <section className="relative z-0 flex min-h-[calc(100vh-25rem)] md:min-h-[calc(100vh-8rem)] bg-black">
       <div className="relative flex-1 overflow-hidden">
         {slides.map((slide, index) => {
@@ -133,7 +134,7 @@ function HeroSlideComponent({
         })}
 
         {/* Dots */}
-        <div className="pointer-events-none absolute bottom-24 right-4 hidden md:flex gap-2">
+        <div className="pointer-events-none absolute bottom-24 right-24 hidden md:flex gap-2">
           {slides.map((slide, index) => {
             const isActive = index === activeIndex;
             return (

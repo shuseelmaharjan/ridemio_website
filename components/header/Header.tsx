@@ -15,14 +15,20 @@ import {
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "../ui/button";
+import { usePathname } from "next/navigation";
 
 type NavSubmenu = { name: string; slug: string };
 type NavItem = { id: string; name: string; submenus: NavSubmenu[] };
 
 export default function Header() {
+
+    const pathname = usePathname();
+    const isHome = pathname === "/";
+
     const [nav, setNav] = React.useState<NavItem[]>([]);
     const [activeId, setActiveId] = React.useState<string | null>(null);
     const [loading, setLoading] = React.useState(true);
+    const [scrolled, setScrolled] = React.useState(false);
 
     // Desktop mega menu
     const [menuOpen, setMenuOpen] = React.useState(false);
@@ -82,13 +88,30 @@ export default function Header() {
         return () => window.removeEventListener("keydown", onKeyDown);
     }, []);
 
+    React.useEffect(() => {
+        const onScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
+
     return (
-        <header className="sticky top-0 z-10 w-full border-b bg-white">
+        // <header className="sticky top-0 z-10 w-full border-b bg-white">
+        <header
+            className={[
+                "fixed top-0 left-0 w-full z-50 transition-all duration-300",
+                isHome &&scrolled
+                    ? "bg-white shadow-md border-b"
+                    : "bg-transparent border-transparent",
+            ].join(" ")}
+        >
+
             <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-0">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2">
                     <Image
-                        src="/logo/logo.jpg"
+                        src="/logo/logo.png"
                         alt="Ridemio logo"
                         width={130}
                         height={40}
@@ -102,7 +125,7 @@ export default function Header() {
                     {/* Language */}
                     <button
                         type="button"
-                        className="hidden md:block inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-100 cursor-pointer"
+                        className="hidden md:flex inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-100 cursor-pointer bg-white"
                     >
                         <Globe className="h-4 w-4" />
                         En
@@ -111,7 +134,7 @@ export default function Header() {
                     {/* Register */}
                     <button
                         type="button"
-                        className="hidden md:block rounded-full px-6 py-2 text-sm font-semibold text-black cursor-pointer"
+                        className="hidden md:flex rounded-full px-6 py-2 text-sm font-semibold text-black cursor-pointer"
                         style={{ backgroundColor: "#FED600" }}
                     >
                         Register
@@ -130,7 +153,7 @@ export default function Header() {
                             {/* Trigger */}
                             <button
                                 type="button"
-                                className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-100 cursor-pointer"
+                                className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold hover:bg-gray-100 cursor-pointer hover:text-black ${scrolled ? "text-black bg-white" : "text-white bg-transparent"}`}
                                 aria-haspopup="true"
                                 aria-expanded={menuOpen}
                             >
@@ -219,7 +242,7 @@ export default function Header() {
                                     type="button"
                                     variant="ghost"
                                     size="icon"
-                                    className="h-10 w-10 rounded-xl border-none hover:bg-gray-50 hover:text-gray-900"
+                                    className={`h-10 w-10 rounded-xl border-none hover:bg-gray-50 hover:text-gray-900 ${isHome && scrolled ? "text-black bg-white" : "text-white bg-transparent"}`}
                                     aria-label="Open menu"
                                 >
                                     <Menu className="h-5 w-5" />
