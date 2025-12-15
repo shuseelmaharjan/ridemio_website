@@ -47,7 +47,7 @@ export function CrutPageView({ data }: Props) {
 
   return (
     <>
-      <div className="min-h-screen bg-white text-black">
+      <div className="min-h-screen bg-white text-black pt-16">
         {/* Page title */}
         <div className="mt-8 sm:mt-10 text-center px-0 md:px-4">
           <h1 className="text-3xl sm:text-2xl md:text-4xl font-bold tracking-tight">
