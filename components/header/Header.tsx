@@ -206,7 +206,7 @@ export default function Header() {
                         })}
                       </div>
 
-                      <ul className="space-y-4 text-[15px] font-semibold cursor-pointer">
+                      <ul className="space-y-4 text-[15px] font-semibold cursor-pointer flex flex-col">
                         {(active?.submenus ?? []).map((s) => (
                           <Link
                             href={`/${s.slug}`}
