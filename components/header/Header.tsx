@@ -22,7 +22,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "../ui/button";
 
 type NavSubmenu = { name: string; slug: string };
