@@ -208,16 +208,24 @@ export default function Header() {
 
                       <ul className="space-y-4 text-[15px] font-semibold cursor-pointer">
                         {(active?.submenus ?? []).map((s) => (
-                          <li key={s.slug}>
-                            <Link
-                              href={`/${s.slug}`}
-                              className="group inline-flex items-center gap-3 cursor-pointer"
-                              onClick={() => setMenuOpen(false)}
-                            >
-                              {s.name}
-                              <ArrowRight className="h-4 w-4 opacity-0 transition text-[#FED600]" />
-                            </Link>
-                          </li>
+                          <Link
+                            href={`/${s.slug}`}
+                            className="group inline-flex items-center gap-3 hover:text-black/90"
+                          >
+                            <span>{s.name}</span>
+
+                            <ArrowRight
+                              className="
+      h-4 w-4
+      text-[#FED600]
+      opacity-0
+      transition-all duration-200
+      group-hover:opacity-100
+      group-hover:translate-x-0.5
+    "
+                            />
+                          </Link>
+
                         ))}
                       </ul>
                     </div>
@@ -272,9 +280,8 @@ export default function Header() {
                           >
                             {item.name}
                             <ChevronRight
-                              className={`h-4 w-4 transition ${
-                                open ? "rotate-90" : ""
-                              }`}
+                              className={`h-4 w-4 transition ${open ? "rotate-90" : ""
+                                }`}
                             />
                           </button>
 
