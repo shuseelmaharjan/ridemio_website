@@ -23,7 +23,7 @@ export function PageContentView({ data }: Props) {
 
   return (
     <>
-      <div className="mx-auto">
+      <div className="mx-auto pt-16">
 
         <section className="relative overflow-hidden">
           {/* Background */}
