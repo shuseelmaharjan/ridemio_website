@@ -14,6 +14,8 @@ type Props = {
 export function DynamicPageRenderer({ resolved }: Props) {
   const { page_type, data } = resolved;
 
+  console.log("DynamicPageRenderer page_type:", page_type);
+
   switch (page_type) {
     case "page_content":
       return <PageContentView data={data} />;
@@ -21,7 +23,7 @@ export function DynamicPageRenderer({ resolved }: Props) {
     case "homepage_category_section":
       return <HomepageCategorySectionView data={data} />;
 
-    case "blog_category":
+    case "blogs_landing":
       return <BlogCategoryView data={data} />;
 
     case "crut_page":
