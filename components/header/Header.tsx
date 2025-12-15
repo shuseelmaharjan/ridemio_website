@@ -3,18 +3,18 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Globe, Menu as MenuIcon } from "lucide-react";
+import { ArrowRight, ChevronRight, Globe, Menu, MenuIcon, UserPlus, X } from "lucide-react";
 import { apiHandler } from "@/api/apiHandler";
 
 import {
     Sheet,
     SheetClose,
     SheetContent,
-    SheetHeader,
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "../ui/button";
 
 type NavSubmenu = { name: string; slug: string };
 type NavItem = { id: string; name: string; submenus: NavSubmenu[] };
@@ -102,7 +102,7 @@ export default function Header() {
                     {/* Language */}
                     <button
                         type="button"
-                        className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-100 cursor-pointer"
+                        className="hidden md:block inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-100 cursor-pointer"
                     >
                         <Globe className="h-4 w-4" />
                         En
@@ -111,7 +111,7 @@ export default function Header() {
                     {/* Register */}
                     <button
                         type="button"
-                        className="rounded-full px-6 py-2 text-sm font-semibold text-black cursor-pointer"
+                        className="hidden md:block rounded-full px-6 py-2 text-sm font-semibold text-black cursor-pointer"
                         style={{ backgroundColor: "#FED600" }}
                     >
                         Register
@@ -211,60 +211,144 @@ export default function Header() {
                         </div>
                     </div>
 
-                    {/* Mobile menu (shadcn Sheet) */}
+                    {/* Mobile menu (shadcn Sheet) - Optimized */}
                     <div className="md:hidden">
                         <Sheet>
                             <SheetTrigger asChild>
-                                <button
+                                <Button
                                     type="button"
-                                    className="inline-flex h-10 w-10 items-center justify-center rounded-xl border-none hover:bg-gray-50"
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-10 w-10 rounded-xl border-none hover:bg-gray-50 hover:text-gray-900"
                                     aria-label="Open menu"
                                 >
-                                    <MenuIcon className="h-5 w-5" />
-                                </button>
+                                    <Menu className="h-5 w-5" />
+                                </Button>
                             </SheetTrigger>
 
-                            <SheetContent side="right" className="w-[340px] p-0">
-                                <SheetHeader className="px-4 py-4">
-                                    <SheetTitle>Menu</SheetTitle>
-                                </SheetHeader>
-                                <Separator />
+                            <SheetContent
+                                side="right"
+                                className="w-2/3 max-w-sm sm:max-w-md"
+                            >
+                                {/* Sheet Header */}
+                                <div className="sticky top-0 z-10 border-b bg-white px-4 py-4 ">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <SheetTitle className="text-lg font-semibold text-gray-900">
+                                                Menu
+                                            </SheetTitle>
+                                        </div>
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-8 w-8"
+                                            asChild
+                                        >
+                                            <SheetClose>
+                                                <X className="h-4 w-4" />
+                                                <span className="sr-only">Close</span>
+                                            </SheetClose>
+                                        </Button>
+                                    </div>
+                                </div>
 
-                                <div className="h-[calc(100vh-65px)] overflow-y-auto px-2 py-2">
+                                {/* Navigation Content */}
+                                <div className="h-[calc(100vh-73px)] overflow-y-auto pb-6">
                                     {loading ? (
-                                        <div className="space-y-2 p-2">
-                                            <div className="h-10 rounded-md bg-gray-100" />
-                                            <div className="h-10 rounded-md bg-gray-100" />
-                                            <div className="h-10 rounded-md bg-gray-100" />
-                                        </div>
-                                    ) : nav.length === 0 ? (
-                                        <div className="p-4 text-sm text-gray-500">
-                                            No navigation available.
-                                        </div>
-                                    ) : (
-                                        <div className="space-y-4">
-                                            {nav.map((item) => (
-                                                <div key={item.id} className="space-y-1">
-                                                    {/* Parent title */}
-                                                    <p className="px-3 py-2 text-sm font-semibold text-gray-900">
-                                                        {item.name}
-                                                    </p>
-
-                                                    {/* Submenus (always visible) */}
-                                                    <div className="flex flex-col gap-1">
-                                                        {(item.submenus ?? []).map((s) => (
-                                                            <SheetClose asChild key={`${item.id}-${s.slug}`}>
-                                                                <Link
-                                                                    href={`/${s.slug}`}
-                                                                    className="rounded-lg px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                                                                >
-                                                                    {s.name}
-                                                                </Link>
-                                                            </SheetClose>
+                                        <div className="space-y-3 px-6 py-8">
+                                            {[...Array(4)].map((_, i) => (
+                                                <div key={i} className="space-y-2">
+                                                    <div className="h-6 w-32 rounded-md bg-gray-200 animate-pulse" />
+                                                    <div className="space-y-1.5 pl-4">
+                                                        {[...Array(3)].map((_, j) => (
+                                                            <div
+                                                                key={j}
+                                                                className="h-5 w-full rounded bg-gray-100 animate-pulse"
+                                                                style={{ animationDelay: `${j * 100}ms` }}
+                                                            />
                                                         ))}
                                                     </div>
                                                 </div>
                                             ))}
+                                        </div>
+                                    ) : nav.length === 0 ? (
+                                        <div className="flex flex-col items-center justify-center px-6 py-12 text-center">
+                                            <div className="rounded-full bg-gray-100 p-3">
+                                                <Menu className="h-6 w-6 text-gray-400" />
+                                            </div>
+                                            <h3 className="mt-4 text-sm font-medium text-gray-900">
+                                                No menu items
+                                            </h3>
+                                            <p className="mt-1 text-xs text-gray-500">
+                                                Navigation content is currently unavailable.
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-1 px-3 py-2">
+                                            {nav.map((item) => (
+                                                <div key={item.id} className="border-b border-gray-100 last:border-0">
+                                                    {/* Parent Category - Accordion Style */}
+                                                    <details className="group">
+                                                        <summary className="flex cursor-pointer items-center justify-between px-3 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50 rounded-lg transition-colors">
+                                                            <span className="flex items-center gap-2">
+                                                                <span className="text-sm sm:text-base">{item.name}</span>
+                                                            </span>
+                                                            <ChevronRight className="h-4 w-4 transition-transform group-open:rotate-90" />
+                                                        </summary>
+
+                                                        {/* Submenus */}
+                                                        <div className="mt-1 pl-9 pr-3 pb-3">
+                                                            <div className="space-y-1">
+                                                                {(item.submenus ?? []).map((s) => (
+                                                                    <SheetClose asChild key={`${item.id}-${s.slug}`}>
+                                                                        <Link
+                                                                            href={`/${s.slug}`}
+                                                                            className="group flex items-center justify-between rounded-lg px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                                                                        >
+                                                                            <span className="flex-1 text-sm sm:text-[0.9375rem]">
+                                                                                {s.name}
+                                                                            </span>
+                                                                            <ArrowRight className="h-3.5 w-3.5 text-gray-400 opacity-0 transition-all group-hover:opacity-100 group-hover:translate-x-0.5" />
+                                                                        </Link>
+                                                                    </SheetClose>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    </details>
+                                                </div>
+                                            ))}
+                                            <Separator />
+                                            {/* Additional Mobile Actions */}
+                                            <div className="mt-6 space-y-3 px-3">
+
+
+                                                <div className="space-y-2">
+                                                    <h4 className="px-3 text-xs font-semibold uppercase text-gray-500 tracking-wider">
+                                                        Quick Actions
+                                                    </h4>
+                                                    <div className="flex gap-2">
+                                                        <Button
+                                                            variant="outline"
+                                                            size="sm"
+                                                            className="flex-1 text-xs sm:text-sm"
+                                                            asChild
+                                                        >
+                                                            <Link href="/register">
+                                                                <UserPlus className="mr-2 h-3.5 w-3.5" />
+                                                                Register
+                                                            </Link>
+                                                        </Button>
+                                                        <Button
+                                                            variant="outline"
+                                                            size="sm"
+                                                            className="flex-1 text-xs sm:text-sm"
+                                                        >
+                                                            <Globe className="mr-2 h-3.5 w-3.5" />
+                                                            English
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     )}
                                 </div>
