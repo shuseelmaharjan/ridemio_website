@@ -71,7 +71,7 @@ export default async function SlugPage({ params }: SlugPageProps) {
   if (!resolved) notFound();
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen pt-16">
       <DynamicPageRenderer resolved={resolved} />
     </main>
   );

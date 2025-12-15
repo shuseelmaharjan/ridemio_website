@@ -123,7 +123,7 @@ export function BlogCategoryView({ data }: Props) {
   const items = blogs?.results ?? [];
 
   return (
-    <div className="w-full pt-16">
+    <div className="w-full">
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-black/70" />
