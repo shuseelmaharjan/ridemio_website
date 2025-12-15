@@ -12,7 +12,7 @@ type Props = {
 
 export function HomepageCategorySectionView({ data }: Props) {
   return (
-    <div className="pt-16">
+    <div>
       <section className="px-4 py-10 sm:py-12 md:py-16">
         <div className="max-w-3xl mx-auto text-center space-y-3 sm:space-y-4 animate-fadeIn">
           {/* Title */}

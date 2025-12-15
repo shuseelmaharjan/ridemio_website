@@ -66,7 +66,7 @@ export default async function BlogDetailPage({ params }: Props) {
   const related = resolved.data.related ?? [];
 
   return (
-    <main className="bg-white">
+    <main className="bg-white mt-16">
       <section className="mx-auto container px-4 py-10 sm:py-14">
         {/* Top image */}
         <div className="mx-auto container">
