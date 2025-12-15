@@ -138,7 +138,7 @@ export default function Header() {
           <button
             type="button"
             className={[
-              "hidden md:flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition",
+              "hidden md:flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition cursor-pointer",
               headerSolid
                 ? "text-gray-800 hover:bg-gray-100"
                 : "text-white hover:bg-white/10",
@@ -151,7 +151,7 @@ export default function Header() {
           {/* Register */}
           <button
             type="button"
-            className="hidden md:flex rounded-full px-6 py-2 text-sm font-semibold text-black"
+            className="hidden md:flex rounded-full px-6 py-2 text-sm font-semibold text-black cursor-pointer"
             style={{ backgroundColor: "#FED600" }}
           >
             Register
@@ -168,7 +168,7 @@ export default function Header() {
             >
               <button
                 className={[
-                  "inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition",
+                  "inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition cursor-pointer",
                   headerSolid
                     ? "text-gray-800 hover:bg-gray-100"
                     : "text-white hover:bg-white/10",
@@ -194,7 +194,7 @@ export default function Header() {
                               key={item.id}
                               onMouseEnter={() => setActiveId(item.id)}
                               className={[
-                                "rounded-md px-4 py-2 text-sm font-semibold transition",
+                                "rounded-md px-4 py-2 text-sm font-semibold transition cursor-pointer",
                                 isActive
                                   ? "bg-white text-black"
                                   : "text-gray-900 hover:bg-white/60",
@@ -206,16 +206,16 @@ export default function Header() {
                         })}
                       </div>
 
-                      <ul className="space-y-4 text-[15px] font-semibold">
+                      <ul className="space-y-4 text-[15px] font-semibold cursor-pointer">
                         {(active?.submenus ?? []).map((s) => (
                           <li key={s.slug}>
                             <Link
                               href={`/${s.slug}`}
-                              className="group inline-flex items-center gap-3"
+                              className="group inline-flex items-center gap-3 cursor-pointer"
                               onClick={() => setMenuOpen(false)}
                             >
                               {s.name}
-                              <ArrowRight className="h-4 w-4 opacity-0 transition group-hover:opacity-100" />
+                              <ArrowRight className="h-4 w-4 opacity-0 transition text-[#FED600]" />
                             </Link>
                           </li>
                         ))}
