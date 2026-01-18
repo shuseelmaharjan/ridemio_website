@@ -23,7 +23,7 @@ jobs:
           chmod 400 ~/.ssh/id_rsa
 
           # Add your server to known_hosts
-          ssh-keyscan -H 54.91.15.72 >> ~/.ssh/known_hosts
+          ssh-keyscan -H 202.51.70.55 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
       # 3️⃣ Optional: Print repo files (for debugging)
@@ -33,7 +33,7 @@ jobs:
       # 4️⃣ Deploy via SSH
       - name: Deploy to server
         run: |
-          ssh -i ~/.ssh/id_rsa root@54.91.15.72 << 'EOF'
+          ssh -i ~/.ssh/id_rsa root@202.51.70.55 << 'EOF'
             mkdir -p /root/ridemio_website
             rm -rf /root/ridemio_website/*
           EOF
@@ -41,9 +41,9 @@ jobs:
       # 5️⃣ Copy files to server (example using rsync)
       - name: Copy files
         run: |
-          rsync -avz -e "ssh -i ~/.ssh/id_rsa" ./ root@54.91.15.72:/root/ridemio_website/
+          rsync -avz -e "ssh -i ~/.ssh/id_rsa" ./ root@202.51.70.55:/root/ridemio_website/
 
       # 6️⃣ Optional: Run deploy script on server
       - name: Run deploy script
         run: |
-          ssh -i ~/.ssh/id_rsa root@54.91.15.72 "bash /root/ridemio_website/run.sh"
+          ssh -i ~/.ssh/id_rsa root@202.51.70.55 "bash /root/ridemio_website/run.sh"
