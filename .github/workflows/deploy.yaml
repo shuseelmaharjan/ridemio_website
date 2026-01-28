@@ -3,47 +3,70 @@ name: Deploy via SSH
 on:
   push:
     branches:
-      - main  # change if needed
-  workflow_dispatch:   # allows manual trigger
+      - main
+      - develop
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repo
+      # 1️⃣ Checkout
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup SSH keys and known_hosts
+      # 2️⃣ Set environment variables based on branch
+      - name: Set deploy variables
+        run: |
+          if [ "${GITHUB_REF_NAME}" = "develop" ]; then
+            echo "SERVER_IP=202.51.70.66" >> $GITHUB_ENV
+            cp .env-dev .env
+            echo "Using .env-dev"
+            cat key/private_key_dev > private_key_base
+            echo "RUN_FILE=run_dev.sh" >> $GITHUB_ENV
+            echo "DEPLOY_PATH=/root/ridemio_website" >> $GITHUB_ENV
+          elif [ "${GITHUB_REF_NAME}" = "main" ]; then
+            echo "SERVER_IP=202.51.70.55" >> $GITHUB_ENV
+            cp .env-prod .env
+            echo "Using .env-prod"
+            cat key/private_key_prod > private_key_base
+            echo "RUN_FILE=run_prod.sh" >> $GITHUB_ENV
+            echo "DEPLOY_PATH=/root/ridemio_website" >> $GITHUB_ENV
+          else
+            echo "No deployment for this branch."
+            exit 1
+          fi
+
+      # 3️⃣ Setup SSH
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          cat key/private_key_base | base64 -d > ~/.ssh/id_rsa
+          cat private_key_base | base64 -d > ~/.ssh/id_rsa
           chmod 400 ~/.ssh/id_rsa
 
           # Add your server to known_hosts
-          ssh-keyscan -H 202.51.70.55 >> ~/.ssh/known_hosts
+          ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-      # 3️⃣ Optional: Print repo files (for debugging)
-      - name: List repo files
-        run: ls -la
 
-      # 4️⃣ Deploy via SSH
-      - name: Deploy to server
+      # 4️⃣ Prepare server directory
+      - name: Prepare server
         run: |
-          ssh -i ~/.ssh/id_rsa root@202.51.70.55 << 'EOF'
-            mkdir -p /root/ridemio_website
-            rm -rf /root/ridemio_website/*
+          ssh -i ~/.ssh/id_rsa root@$SERVER_IP << EOF
+            mkdir -p $DEPLOY_PATH
+            rm -rf $DEPLOY_PATH/*
           EOF
 
-      # 5️⃣ Copy files to server (example using rsync)
+      # 5️⃣ Copy files
       - name: Copy files
         run: |
-          rsync -avz -e "ssh -i ~/.ssh/id_rsa" ./ root@202.51.70.55:/root/ridemio_website/
+          rsync -avz \
+            -e "ssh -i ~/.ssh/id_rsa" \
+            ./ root@$SERVER_IP:$DEPLOY_PATH/
 
-      # 6️⃣ Optional: Run deploy script on server
+      # 6️⃣ Run deploy script
       - name: Run deploy script
         run: |
-          ssh -i ~/.ssh/id_rsa root@202.51.70.55 "bash /root/ridemio_website/run.sh"
+          ssh -i ~/.ssh/id_rsa root@$SERVER_IP \
+            "bash $DEPLOY_PATH/$RUN_FILE"
