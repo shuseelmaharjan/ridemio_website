@@ -24,14 +24,14 @@ jobs:
             cp .env-dev .env
             echo "Using .env-dev"
             cat key/private_key_dev > private_key_base
-            echo "RUN_FILE=run_dev.sh" >> $GITHUB_ENV
+            echo "RUN_FILE=run-dev.sh" >> $GITHUB_ENV
             echo "DEPLOY_PATH=/root/ridemio_website" >> $GITHUB_ENV
           elif [ "${GITHUB_REF_NAME}" = "main" ]; then
             echo "SERVER_IP=202.51.70.55" >> $GITHUB_ENV
             cp .env-prod .env
             echo "Using .env-prod"
             cat key/private_key_prod > private_key_base
-            echo "RUN_FILE=run_prod.sh" >> $GITHUB_ENV
+            echo "RUN_FILE=run-prod.sh" >> $GITHUB_ENV
             echo "DEPLOY_PATH=/root/ridemio_website" >> $GITHUB_ENV
           else
             echo "No deployment for this branch."
