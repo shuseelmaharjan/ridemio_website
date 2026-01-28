@@ -23,14 +23,14 @@ jobs:
             echo "SERVER_IP=202.51.70.66" >> $GITHUB_ENV
             cp .env-dev .env
             echo "Using .env-dev"
-            cat key/private_key_dev > private_key_base
+            echo "${{ secrets.PRIVATE_KEY_DEV }}" > private_key_base
             echo "RUN_FILE=run-dev.sh" >> $GITHUB_ENV
             echo "DEPLOY_PATH=/root/ridemio_website" >> $GITHUB_ENV
           elif [ "${GITHUB_REF_NAME}" = "main" ]; then
             echo "SERVER_IP=202.51.70.55" >> $GITHUB_ENV
             cp .env-prod .env
             echo "Using .env-prod"
-            cat key/private_key_prod > private_key_base
+            echo "${{ secrets.PRIVATE_KEY_PROD }}" > private_key_base
             echo "RUN_FILE=run-prod.sh" >> $GITHUB_ENV
             echo "DEPLOY_PATH=/root/ridemio_website" >> $GITHUB_ENV
           else
