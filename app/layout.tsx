@@ -4,6 +4,7 @@ import "./globals.css";
 import localFont from "next/font/local";
 import { Footer } from "@/components/layout/footer/Footer";
 import Header from "@/components/header/Header";
+import ConditionalLayout from "@/components/layout/ConditionalLayout";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -107,9 +108,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} ${agrandir.variable}`}>
-        <Header />
-        {children}
-        <Footer />
+        <ConditionalLayout>{children}</ConditionalLayout>
       </body>
     </html>
   );
