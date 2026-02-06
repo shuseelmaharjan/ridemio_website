@@ -56,7 +56,7 @@ export function ListSection({ listDetails }: Props) {
           <div className="w-full md:w-1/2 space-y-5 sm:space-y-6">
             {[1, 2, 3].map((i) => (
               <div key={i} className="flex items-start gap-3 sm:gap-4">
-                <Skeleton className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl" />
+                <Skeleton className="h-10 w-10 rounded-xl" />
 
                 <div className="flex-1 space-y-2">
                   <Skeleton className="h-4 sm:h-5 w-3/4" />
@@ -102,9 +102,10 @@ export function ListSection({ listDetails }: Props) {
           {listContents.map((content, idx) => (
             <div key={content.id ?? idx}>
               <div className="flex items-start gap-3 sm:gap-4 rounded-2xl">
-                <div className="mt-1 flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-yellow-300 text-sm sm:text-base font-bold shadow-md">
+                <div className="mt-1 flex size-10 shrink-0 items-center justify-center rounded-xl bg-yellow-300 text-base font-bold shadow-md">
                   {idx + 1}
                 </div>
+
 
                 <div>
                   <h4 className="font-semibold text-base sm:text-lg md:text-xl leading-snug">
