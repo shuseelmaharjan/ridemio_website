@@ -109,12 +109,7 @@ export function CrutPageView({ data }: Props) {
                     </h2>
 
                     <div
-                      className="
-                        text-xs sm:text-sm md:text-base
-                        text-gray-700
-                        leading-relaxed sm:leading-loose
-                        space-y-3
-                      "
+                      className="prose prose-sm sm:prose-base max-w-none"
                       dangerouslySetInnerHTML={{
                         __html: section.content,
                       }}

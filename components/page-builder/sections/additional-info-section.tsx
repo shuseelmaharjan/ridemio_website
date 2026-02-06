@@ -86,12 +86,7 @@ export function AdditionalInfoSection({ additionalInfo }: Props) {
           {/* Description */}
           {additionalInfo.description && (
             <div
-              className="
-                text-xs sm:text-sm md:text-base text-white space-y-2
-                [&_ul]:list-disc [&_ul]:ml-5
-                [&_ol]:list-decimal [&_ol]:ml-5
-                [&_li]:mt-1
-              "
+              className="prose prose-sm sm:prose-base max-w-none text-white [&_*]:text-white"
               dangerouslySetInnerHTML={{
                 __html: additionalInfo.description,
               }}

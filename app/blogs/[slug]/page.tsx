@@ -110,13 +110,7 @@ export default async function BlogDetailPage({ params }: Props) {
           {/* Content */}
           <article className="mt-8 rounded-2xl bg-white px-3 py-6 sm:px-8 sm:py-8">
             <div
-              className="
-                prose prose-sm sm:prose-base
-                max-w-none
-                prose-p:leading-relaxed
-                prose-a:text-black
-                prose-a:underline
-              "
+              className="prose prose-sm sm:prose-base max-w-none"
               dangerouslySetInnerHTML={{ __html: blog.content }}
             />
           </article>
