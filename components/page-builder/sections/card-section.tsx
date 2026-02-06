@@ -81,23 +81,75 @@ export function CardSection({ cardDetails }: Props) {
           </p>
         )}
       </div>
+      {cardContents.map((content, idx) => (
+        <div
+          key={content.id ?? idx}
+          className="
+      rounded-3xl bg-white shadow-sm
+      px-5 sm:px-6 py-4 sm:py-5
+      flex flex-row md:flex-col
+      items-start md:items-start
+      gap-4 md:gap-3
+    "
+        >
+          {/* Icon */}
+          <div
+            className="
+        shrink-0
+        inline-flex items-center justify-center
+        h-9 w-9 sm:h-10 sm:w-10
+        rounded-2xl bg-yellow-300
+        text-lg sm:text-2xl
+      "
+            dangerouslySetInnerHTML={{
+              __html: content.icon?.trim() || `<span>${idx + 1}</span>`,
+            }}
+          />
+
+          {/* Text */}
+          <div className="space-y-1 flex-1">
+            <h3 className="text-sm sm:text-base md:text-lg font-bold">
+              {content.title}
+            </h3>
+
+            {content.description && (
+              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                {content.description}
+              </p>
+            )}
+          </div>
+        </div>
+      ))}
 
       {/* Cards */}
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-4">
         {cardContents.map((content, idx) => (
           <div
             key={content.id ?? idx}
-            className="rounded-3xl bg-white shadow-sm px-5 sm:px-6 py-4 sm:py-5 flex flex-col gap-3"
+            className="
+      rounded-3xl bg-white shadow-sm
+      px-5 sm:px-6 py-4 sm:py-5
+      flex flex-row md:flex-col
+      items-start md:items-start
+      gap-4 md:gap-3
+    "
           >
             {/* Icon */}
             <div
-              className="inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-2xl bg-yellow-300 text-lg sm:text-2xl"
+              className="
+        shrink-0
+        inline-flex items-center justify-center
+        h-9 w-9 sm:h-10 sm:w-10
+        rounded-2xl bg-yellow-300
+        text-lg sm:text-2xl
+      "
               dangerouslySetInnerHTML={{
                 __html: content.icon?.trim() || `<span>${idx + 1}</span>`,
               }}
             />
 
-            <div className="space-y-1">
+            {/* Text */}
+            <div className="space-y-1 flex-1">
               <h3 className="text-sm sm:text-base md:text-lg font-bold">
                 {content.title}
               </h3>
@@ -110,6 +162,7 @@ export function CardSection({ cardDetails }: Props) {
             </div>
           </div>
         ))}
+
       </div>
 
       {/* Button */}

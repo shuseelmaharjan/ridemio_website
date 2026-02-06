@@ -30,21 +30,25 @@ export function ImageCardSection({ title, cards, ctaLabel }: Props) {
           <div
             key={idx}
             className="
-              rounded-3xl bg-white border border-gray-100
-              p-5 sm:p-6 md:p-7
-              flex flex-col gap-3 sm:gap-4
-              shadow-sm hover:shadow-md
-              transition-all duration-300
-            "
+      rounded-3xl bg-white border border-gray-100
+      p-5 sm:p-6 md:p-7
+      flex flex-row md:flex-col
+      items-start
+      gap-4 md:gap-3
+      shadow-sm hover:shadow-md
+      transition-all duration-300
+    "
           >
             {card.image?.url && (
               <div
                 className="
-                  h-16 w-16 sm:h-20 sm:w-20
-                  rounded-2xl sm:rounded-3xl
-                  flex items-center justify-center
-                  overflow-hidden mb-1 sm:mb-2
-                "
+          shrink-0
+          h-16 w-16 sm:h-20 sm:w-20
+          rounded-2xl sm:rounded-3xl
+          flex items-center justify-center
+          overflow-hidden
+          mb-0 md:mb-2
+        "
               >
                 <img
                   src={card.image.url}
@@ -54,7 +58,7 @@ export function ImageCardSection({ title, cards, ctaLabel }: Props) {
               </div>
             )}
 
-            <div className="space-y-1.5 sm:space-y-2">
+            <div className="space-y-1.5 sm:space-y-2 flex-1">
               <h3 className="text-base sm:text-lg md:text-xl font-semibold text-gray-900 leading-snug">
                 {card.title}
               </h3>
@@ -67,6 +71,7 @@ export function ImageCardSection({ title, cards, ctaLabel }: Props) {
             </div>
           </div>
         ))}
+
       </div>
 
       {/* CTA */}
