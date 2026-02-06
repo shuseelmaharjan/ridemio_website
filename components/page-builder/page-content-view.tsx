@@ -1,6 +1,7 @@
 // components/page-builder/page-content-view.tsx
 "use client";
 
+import { usePathname } from "next/navigation";
 import { CardSection } from "./sections/card-section";
 import { GridSection } from "./sections/grid-section";
 import { ListSection } from "./sections/list-section";
@@ -17,6 +18,8 @@ type Props = {
 };
 
 export function PageContentView({ data }: Props) {
+  const pathname = usePathname();
+  const isMobileRoute = pathname?.startsWith("/mobile");
   const hasDescription = data.have_description && data.description;
   const hasImage = data.have_image && data.image;
   const coverUrl = data.cover_page?.url || null;
@@ -165,7 +168,7 @@ export function PageContentView({ data }: Props) {
           <AdditionalInfoSection additionalInfo={data.additional_info_details} />
         )}
       </div>
-      <DownloadSection />
+      {!isMobileRoute && <DownloadSection />}
     </>
   );
 }

@@ -1,6 +1,7 @@
 // components/page-builder/career-page-view.tsx
 "use client";
 
+import { usePathname } from "next/navigation";
 import DownloadNow from "../common/additional/DownloadNow";
 
 type Props = {
@@ -17,6 +18,8 @@ type Props = {
 };
 
 export function CareerPageView({ data }: Props) {
+  const pathname = usePathname();
+  const isMobileRoute = pathname?.startsWith("/mobile");
   const start = new Date(data.start_date);
   const end = new Date(data.end_date);
 
@@ -81,7 +84,7 @@ export function CareerPageView({ data }: Props) {
         </div>
       </section>
     </div>
-    <DownloadNow/>
+    {!isMobileRoute && <DownloadNow/>}
     </>
   );
 }

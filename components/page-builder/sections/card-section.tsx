@@ -2,6 +2,7 @@
 
 import { UAParser } from "ua-parser-js";
 import { Button } from "@/components/ui/button";
+import * as Icons from "lucide-react";
 
 type CardContent = {
   id?: string;
@@ -22,6 +23,32 @@ type CardDetails = {
 type Props = {
   cardDetails: CardDetails;
 };
+
+// Helper component to render either Font Awesome HTML or Lucide icon
+function IconRenderer({ icon, fallback }: { icon?: string | null; fallback: React.ReactNode }) {
+  if (!icon?.trim()) {
+    return <>{fallback}</>;
+  }
+
+  // Check if it's HTML (Font Awesome)
+  if (icon.includes("<")) {
+    return <div dangerouslySetInnerHTML={{ __html: icon.trim() }} />;
+  }
+
+  // Try to render as Lucide icon
+  const iconName = icon
+    .replace(/-([a-z])/g, (_, c) => c.toUpperCase()) // kebab → camel
+    .replace(/^./, (c) => c.toUpperCase()); // capitalize first
+
+  const LucideIcon = (Icons as any)[iconName];
+
+  if (LucideIcon) {
+    return <LucideIcon size={24} className="text-white" />;
+  }
+
+  // Fallback if icon name not found
+  return <>{fallback}</>;
+}
 
 export function CardSection({ cardDetails }: Props) {
   const cardContents = cardDetails.card_contents || [];

@@ -138,7 +138,7 @@ export const Footer: React.FC = () => {
   const [socialIconLinks, setSocialIconLinks] = useState<SocialMediaLink[]>([]);
   const [footerGroups, setFooterGroups] = useState<ApiFooterGroup[]>([]);
   const [footerRows, setFooterRows] = useState<ApiFooterRow[]>([]);
-  const [loading, setLoading] = useState(true); // ✅ start true so skeleton shows immediately
+  const [loading, setLoading] = useState(true); 
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -286,11 +286,11 @@ export const Footer: React.FC = () => {
                   priority
                 />
               </Link>
-              <div className="block md:hidden">
+              <div className="hidden md:hidden">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-fit gap-2 !rounded-full border-none bg-white text-black hover:bg-gray-100 hidden md:inline-flex"
+                  className="hidden w-fit gap-2 !rounded-full border-none bg-white text-black hover:bg-gray-100 hidden md:inline-flex"
                 >
                   <Globe className="h-4 w-4" />
                   <span>En</span>
@@ -313,9 +313,9 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Middle: language + app buttons */}
-        <div className="flex flex-col gap-6 pt-6 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-6 pt-6 md:flex-row md:items-center md:justify-end">
 
-          <div className="hidden md:block">
+          <div className="hidden md:hidden">
             <Button
               variant="outline"
               size="sm"

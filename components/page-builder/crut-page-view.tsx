@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import DownloadNow from "../common/additional/DownloadNow";
 
 type Props = {
@@ -15,6 +16,8 @@ type Props = {
 export function CrutPageView({ data }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
+  const pathname = usePathname();
+  const isMobileRoute = pathname?.startsWith("/mobile");
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -124,7 +127,7 @@ export function CrutPageView({ data }: Props) {
         </div>
       </div>
 
-      <DownloadNow />
+      {!isMobileRoute && <DownloadNow />}
     </>
   );
 }

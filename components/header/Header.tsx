@@ -138,7 +138,7 @@ export default function Header() {
           <button
             type="button"
             className={[
-              "hidden md:flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition cursor-pointer",
+              "hidden md:hidden items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition cursor-pointer",
               headerSolid
                 ? "text-gray-800 hover:bg-gray-100"
                 : "text-white hover:bg-white/10",
@@ -151,7 +151,7 @@ export default function Header() {
           {/* Register */}
           <button
             type="button"
-            className="hidden md:flex rounded-full px-6 py-2 text-sm font-semibold text-black cursor-pointer"
+            className="hidden md:hidden rounded-full px-6 py-2 text-sm font-semibold text-black cursor-pointer"
             style={{ backgroundColor: "#FED600" }}
           >
             Register

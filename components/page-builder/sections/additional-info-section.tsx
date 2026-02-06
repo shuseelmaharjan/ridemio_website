@@ -102,19 +102,19 @@ export function AdditionalInfoSection({ additionalInfo }: Props) {
           {additionalInfo.button_label && (
             <div className="flex items-center justify-center md:justify-start mb-4">
               <Button
-              size="sm"
-              className="sm:size-default !text-black bg-yellow font-semibold"
-              onClick={redirectLink}
-            >
-              {additionalInfo.button_label}
-            </Button>
-              </div>
+                size="sm"
+                className="sm:size-default !text-black bg-yellow font-semibold"
+                onClick={redirectLink}
+              >
+                {additionalInfo.button_label}
+              </Button>
+            </div>
           )}
         </div>
 
         {/* Desktop image */}
         {imageUrl && (
-          <div className="hidden md:block w-full md:w-1/2 flex-shrink-0">
+          <div className="hidden md:flex md:w-1/2 flex-shrink-0 justify-end">
             <img
               src={imageUrl}
               alt={additionalInfo.title}
@@ -122,6 +122,7 @@ export function AdditionalInfoSection({ additionalInfo }: Props) {
             />
           </div>
         )}
+
       </div>
     </section>
   );
