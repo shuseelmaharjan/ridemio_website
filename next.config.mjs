@@ -15,6 +15,13 @@ const remotePatterns = [
     hostname: "ridesewa.s3.amazonaws.com",
     pathname: "/**",
   },
+  
+  // Ridemio S3 bucket
+  {
+    protocol: "https",
+    hostname: "s3.ridemio.com",
+    pathname: "/**",
+  },
 ];
 
 if (serverUrl) {
