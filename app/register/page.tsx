@@ -86,7 +86,7 @@ export default function RegisterPage() {
             <div className="relative h-12 w-40">
               <Image
                 src="/logo/logo.jpg"
-                alt="SideMio Logo"
+                alt="Ridemio Logo"
                 fill
                 className="object-contain"
                 priority
@@ -94,7 +94,7 @@ export default function RegisterPage() {
             </div>
           </Link>
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
-            Join SideMio Today
+            Join Ridemio Today
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
             Register as a rider to earn money or as a user to enjoy convenient rides
@@ -494,7 +494,7 @@ export default function RegisterPage() {
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <CheckCircle className="h-6 w-6 text-primary" />
-                  Why Join SideMio?
+                  Why Join Ridemio?
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -570,7 +570,7 @@ export default function RegisterPage() {
                     </div>
                   </div>
                   <p className="italic text-gray-200">
-                    "Joining SideMio was the best decision I made last year. The flexible hours let me work around my family schedule, and the earnings are great!"
+                    "Joining Ridemio was the best decision I made last year. The flexible hours let me work around my family schedule, and the earnings are great!"
                   </p>
                   <div className="flex gap-1">
                     {[...Array(5)].map((_, i) => (
